@@ -1,4 +1,3 @@
-from gc import callbacks
 import tensorflow as tf
 from utils.model import get_model
 from utils.get_x_y import get_x_y

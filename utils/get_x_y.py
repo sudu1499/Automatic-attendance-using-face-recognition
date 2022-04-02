@@ -5,6 +5,7 @@ import cv2
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.model_selection import train_test_split
 import yaml
+import pickle
 def get_x_y():
     config=yaml.safe_load(open('utils\config.yaml','r'))
     path=config['img_path']
@@ -23,5 +24,6 @@ def get_x_y():
     yy=np.array(y)
     y=ohe.fit_transform(yy.reshape((-1,1))).toarray()
     x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=.3)
+    pickle.dump(ohe,open('ENC\\encoder','wb'))
     return x_train,x_test,y_train,y_test
     get_x_y()
