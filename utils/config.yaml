@@ -1,0 +1,4 @@
+no_students: 5
+img_path: 'E:\project\new_face_recognition\images'
+model_path: 'E:\project\new_face_recognition\saved_model'
+size: 160
