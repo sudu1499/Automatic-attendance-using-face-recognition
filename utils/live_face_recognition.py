@@ -4,6 +4,7 @@ import numpy as np
 import yaml
 from tensorflow.keras.models import load_model
 import pickle
+
 config=yaml.safe_load(open('utils\config.yaml','r'))
 path=config['img_path']
 model_path=config['model_path']
@@ -18,13 +19,22 @@ while 1:
     frame_g=cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
     d=det(frame_g)
     if len(d):
+        crp=[]
         for i in d:
-            crp=frame[i.top():i.bottom(),i.left():i.right()]
-            crp=cv2.resize(crp,(size,size))
-            cv2.imshow('c',crp)
-            crp=np.reshape(crp,(1,size,size,3))
-            print( encoder.inverse_transform([[1 if i>=.5 else 0 for i in model.predict(crp)[0] ] ] ))
-            #print(model.predict(crp))
+            t=frame[i.top():i.bottom(),i.left():i.right()]
+            crp.append(cv2.resize(t,(size,size)))
+            #crp.append(np.reshape(t,(1,size,size,3)))
+            #print( encoder.inverse_transform([[1 if i>=.5 else 0 for i in model.predict(crp)[0] ] ] ))
+            #print(np.argmax(model.predict(crp)))
+        #cv2.imshow(f'{i}',)
+        k=[]
+        for i,j in enumerate(crp):
+            m=j
+            j=np.reshape(j,(1,size,size,3))
+            #k.append(np.argmax(model.predict(j)))
+            h=cv2.putText(m,f'{np.argmax(model.predict(j))}',org=(0,150), fontFace=cv2.FONT_HERSHEY_TRIPLEX,lineType=cv2.LINE_AA,thickness=3,color=(0,0,255),fontScale=1)
+            cv2.imshow(f'{i}',m)
+        print(k)
         if cv2.waitKey(1)==ord('q'):
             break
 cv2.destroyAllWindows()
