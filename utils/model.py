@@ -5,22 +5,31 @@ import io
 def get_model(config):
     xcep=Xception(include_top=False,weights='imagenet',input_shape=(config['size'],config['size'],3))
     for i in xcep.layers:
-        i.trainable=False
+        i.trainable=False###try to trian laste layer
     model=tf.keras.models.Sequential()
     model.add(xcep)
     model.add(tf.keras.layers.Flatten())
+
     model.add(tf.keras.layers.Dropout(rate=.3))
     model.add(tf.keras.layers.BatchNormalization())
-    model.add(tf.keras.layers.Dense(units=100,activation='relu',kernel_initializer='HeNormal'))#,kernel_regularizer=tf.keras.regularizers.l2(.001))
+    model.add(tf.keras.layers.Dense(units=500,activation='relu',kernel_initializer='HeNormal'))#kernel_regularizer=tf.keras.regularizers.l2(.001))
+
     model.add(tf.keras.layers.Dropout(rate=.3))
     model.add(tf.keras.layers.BatchNormalization())
-    model.add(tf.keras.layers.Dense(units=100,activation='relu',kernel_initializer='HeNormal'))
+    model.add(tf.keras.layers.Dense(units=500,activation='relu',kernel_initializer='HeNormal'))
+
     model.add(tf.keras.layers.Dropout(rate=.3))
     model.add(tf.keras.layers.BatchNormalization())    
-    model.add(tf.keras.layers.Dense(units=50,activation='relu',kernel_initializer='HeNormal'))
+    model.add(tf.keras.layers.Dense(units=500,activation='relu',kernel_initializer='HeNormal'))
+
+    model.add(tf.keras.layers.Dropout(rate=.3))
+    model.add(tf.keras.layers.BatchNormalization())    
+    model.add(tf.keras.layers.Dense(units=100,activation='relu',kernel_initializer='HeNormal'))
+
     model.add(tf.keras.layers.Dropout(rate=.3))
     model.add(tf.keras.layers.BatchNormalization())    
     model.add(tf.keras.layers.Dense(units=config['no_students'],activation='softmax'))
+
     model.compile(loss='categorical_crossentropy',metrics=['accuracy'],optimizer='adam')
     def log(model):
         with io.StringIO() as stream:

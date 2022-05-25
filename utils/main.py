@@ -6,28 +6,27 @@ from tensorflow.keras.callbacks import EarlyStopping
 import yaml
 from utils.save_croped import save_crp
 
+from utils.cusotm_model import custom_model
+
 config=yaml.safe_load(open('utils\config.yaml','r'))
 model_path=config['model_path']
 
 ################### for new students ############################
-save_crp(config)
+#save_crp(config)
 
 #################################################################
-
-
 
 x_train,x_test,y_train,y_test=get_x_y()
 x_train,x_val,y_train,y_val=train_test_split(x_train,y_train,test_size=.25)
 
 (model,summary)=get_model(config)
 
+###################################for custom network#########################
+#model=custom_model(config)
+##############################################################################
 
 clb=EarlyStopping(monitor='val_accuracy',patience=5,restore_best_weights=True)
 
-model.fit(x_train,y_train,validation_data=(x_val,y_val),epochs=30,callbacks=[clb])
+model.fit(x_train,y_train,validation_data=(x_val,y_val),epochs=10,callbacks=[clb],batch_size=64)
 
 model.save(model_path)
-
-
-
-model=model2(config)
