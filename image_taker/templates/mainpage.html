@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <link rel="stylesheet" href={{url_for('static',filename='style1.css')}}>
+</head>
+    
+    
+    <body>
+        <center>
+        <h1>Welcome to Attendance Monitoring System</h1>
+        <form action = "http://localhost:5000/ack"  method="POST">
+        <table>   
+        <tr><td>Name</td>  
+            <td><input type ="text" name ="sname"></td></tr>  
+        </table> 
+        <button type="submit">CLICK HERE</button>
+        </form>
+        <P>For Register</P>
+    <!-- <a href='Register'> -->
+    </a><br><br>
+        <a href="{{url_for('logout')}}"><button>Logout</button></a><br>
+    </center>
+    </body>
+</html>

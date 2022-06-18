@@ -1,5 +1,6 @@
-encoder_path: E:\project\new_face_recognition\ENC\encoder
-img_path: E:\project\new_face_recognition\images\
-model_path: E:\project\new_face_recognition\saved_model
-no_students: 7
+encoder_path: D:\projects\new_face_recognition\ENC\encoder
+img_path: D:\projects\new_face_recognition\images\
+model_path: D:\projects\new_face_recognition\saved_model
+no_students: 8
 size: 160
+student_face_db: D:\projects\new_face_recognition\StudentFace.db

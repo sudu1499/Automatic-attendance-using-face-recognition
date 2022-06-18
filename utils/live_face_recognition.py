@@ -7,7 +7,7 @@ from tensorflow.keras.models import load_model
 import pickle
 from datetime import datetime
 
-def live_recognize():
+def live_recognize(model):
     config=yaml.safe_load(open('utils\config.yaml','r'))
     path=config['img_path']
     model_path=config['model_path']
@@ -15,11 +15,16 @@ def live_recognize():
     encoder=pickle.load(open(config['encoder_path'],'rb'))
     no_students=config['no_students']
 
-    model=load_model(model_path)#################### or use live model from main.py##############
+   # model=load_model(model_path)#################### or use live model from main.py##############
     det=dlib.get_frontal_face_detector()
     conn=sqlite3.connect('attendance.db')
     c=conn.cursor()
     vid=cv2.VideoCapture(0)
+    d=datetime.now()
+    c.execute(f'select * from student where date="{str(d.year)+"-"+str(d.month)+"-"+str(d.day)}"')
+    students=[]
+    for i in c.fetchall():
+        students.append(i[0])
     name=''
     while 1:
         _,frame=vid.read()
@@ -42,19 +47,26 @@ def live_recognize():
                 #k.append(np.argmax(model.predict(j)))
                 #_=cv2.putText(m,f'{encoder.inverse_transform([[1 if i>=.5 else 0 for i in model.predict(j)[0]]])[0] }',org=(0,150), fontFace=cv2.FONT_HERSHEY_TRIPLEX,lineType=cv2.LINE_AA,thickness=3,color=(0,0,255),fontScale=1)
                 h=np.zeros((1,no_students))
-                h[0][np.argmax(model.predict(j))]=1
+                h[0][np.argmax(model.predict(j/255))]=1
                 name=encoder.inverse_transform(h)[0][0]
-                d=datetime.now()
-                q=f'insert into student values("{name}","{str(d.year)+"-"+str(d.month)+"-"+str(d.day)}")'
-                print(q)
-                c.execute(q)
+                if name not in students:
+                    d=datetime.now()
+                    q=f'insert into student values("{name}","{str(d.year)+"-"+str(d.month)+"-"+str(d.day)}")'
+                    print(q)
+                    c.execute(q)
+                    students.append(name)
                 _=cv2.putText(m,f'{encoder.inverse_transform(h)[0][0] }',org=(0,150), fontFace=cv2.FONT_HERSHEY_TRIPLEX,lineType=cv2.LINE_AA,thickness=3,color=(0,0,255),fontScale=1)
                 cv2.imshow(f'{i}',m)
                 
             if cv2.waitKey(1)==ord('q'):
                 conn.commit()
                 break
+        else:
+            try:
+                cv2.destroyAllWindows()
+            except:
+                continue
     cv2.destroyAllWindows()
     vid.release()
 
-live_recognize()
+#live_recognize()

@@ -6,7 +6,8 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.model_selection import train_test_split
 import yaml
 import pickle
-def get_x_y():
+import sqlite3
+def get_x_y_from_folder():
     config=yaml.safe_load(open('utils\config.yaml','r'))
     path=config['img_path']
     size=config['size']    
@@ -26,4 +27,24 @@ def get_x_y():
     x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=.3)
     pickle.dump(ohe,open('ENC\\encoder','wb'))
     return x_train,x_test,y_train,y_test
-    get_x_y()
+
+def get_x_y():
+    config=yaml.safe_load(open('utils\config.yaml','r'))
+    student_face_db=config['student_face_db']
+    conn=sqlite3.connect(student_face_db)
+    ohe=OneHotEncoder()
+    c=conn.cursor()
+    q='select * from student_face'
+    c.execute(q)
+    x=[]
+    y=[]
+    for i in c.fetchall():
+        x.append([cv2.imdecode(np.fromstring(i[1],np.uint8),cv2.IMREAD_COLOR)])
+        y.append(i[0])
+    x=np.array(x)
+    yy=np.array(y)
+    y=ohe.fit_transform(yy.reshape((-1,1))).toarray()
+    x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=.3)
+    pickle.dump(ohe,open('ENC\\encoder','wb'))
+    return x_train,x_test,y_train,y_test
+    
