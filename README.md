@@ -6,7 +6,8 @@ It require a camera and Laptop.
     1. tensorflow
     2. opencv
     3. keras
-    4. flask
+    4. Dlib
+    5. flask
 # process
 
     1. captures the frame from camera.
