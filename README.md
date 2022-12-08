@@ -9,4 +9,3 @@ process->
     3. detect the presence of face in it
     4. detected face is given to model to predict the name of student.
     5. this name is used to update the attendance database.
- 
