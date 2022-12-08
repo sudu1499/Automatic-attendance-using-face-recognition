@@ -3,7 +3,7 @@
 It is a system used to take attendance of the students while they are entering to the class room.
 It require a camera and Laptop.
 
-process->
+# process
 
     1. captures the frame from camera.
     2. preprocess the image.
