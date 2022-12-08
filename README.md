@@ -1,4 +1,4 @@
-Automatic attendance using Face recognition.
+# Automatic attendance using Face recognition.
 
 It is a system used to take attendance of the students while they are entering to the class room.
 It require a camera and Laptop.
