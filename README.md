@@ -2,7 +2,11 @@
 
 It is a system used to take attendance of the students while they are entering to the class room.
 It require a camera and Laptop.
-
+# used 
+    1. tensorflow
+    2. opencv
+    3. keras
+    4. flask
 # process
 
     1. captures the frame from camera.
